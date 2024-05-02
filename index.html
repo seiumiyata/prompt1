@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロンプト作成ツール - セイウ株式会社</title>
+  <style>
+    body{font-family:Arial,sans-serif;background-color:#f0f0f0;margin:0;padding:20px}
+    h1{color:#004080;text-align:center}
+    form{background-color:#fff;padding:20px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+    label{display:block;margin-bottom:10px;color:#333}
+    input[type=text],input[type=number]{width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;margin-bottom:20px}
+    input[type=checkbox]{margin-right:5px}
+    input[type=submit],button{background-color:#004080;color:#fff;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-size:16px}
+    input[type=submit]:hover,button:hover{background-color:#002d5b}
+    #output{background-color:#fff;padding:20px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.1);white-space:pre-wrap;margin-top:20px}
+  </style>
+</head>
+<body>
+  <h1>プロンプト作成ツール - セイウ株式会社</h1>
+  <form id="promptForm">
+    <label for="companyName">自社の会社名:</label>
+    <input type="text" id="companyName" name="companyName" value="セイウ株式会社">
+    <label for="personInCharge">担当者名:</label>
+    <input type="text" id="personInCharge" name="personInCharge">
+    <label for="productName">製品名:</label>
+    <input type="text" id="productName" name="productName">
+    <label for="relatedKeywords">製品に関連するキーワード（カンマ区切り）:</label>
+    <input type="text" id="relatedKeywords" name="relatedKeywords">
+    <label for="targetIndustry">導入先の業態や業種:</label>
+    <input type="text" id="targetIndustry" name="targetIndustry">
+    <label for="pageCount">プレゼン資料のページ数:</label>
+    <input type="number" id="pageCount" name="pageCount">
+    <h2>プレゼン資料に盛り込む項目を選択してください:</h2>
+    <input type="checkbox" id="executiveSummary" name="sections" value="要約">
+    <label for="executiveSummary">要約</label><br>
+    <input type="checkbox" id="purposeOfProposal" name="sections" value="提案の目的">
+    <label for="purposeOfProposal">提案の目的</label><br>
+    <input type="checkbox" id="productOverview" name="sections" value="製品概要">
+    <label for="productOverview">製品概要</label><br>
+    <input type="checkbox" id="marketAnalysis" name="sections" value="市場分析">
+    <label for="marketAnalysis">市場分析</label><br>
+    <input type="checkbox" id="targetCustomers" name="sections" value="ターゲット顧客">
+    <label for="targetCustomers">ターゲット顧客</label><br>
+    <input type="checkbox" id="competitiveAnalysis" name="sections" value="競合分析">
+    <label for="competitiveAnalysis">競合分析</label><br>
+    <input type="checkbox" id="salesStrategy" name="sections" value="販売戦略">
+    <label for="salesStrategy">販売戦略</label><br>
+    <input type="checkbox" id="marketingPlan" name="sections" value="マーケティング計画">
+    <label for="marketingPlan">マーケティング計画</label><br>
+    <input type="checkbox" id="financialProjections" name="sections" value="財務予測">
+    <label for="financialProjections">財務予測</label><br>
+    <input type="checkbox" id="implementationPlan" name="sections" value="実施計画">
+    <label for="implementationPlan">実施計画</label><br>
+    <input type="checkbox" id="riskAssessment" name="sections" value="リスク評価">
+    <label for="riskAssessment">リスク評価</label><br>
+    <input type="checkbox" id="appendix" name="sections" value="付録">
+    <label for="appendix">付録</label><br>
+    <input type="checkbox" id="googleSearch" name="googleSearch" checked>
+    <label for="googleSearch">製品名をキーワードにしてGoogle検索を行い、検索結果を参考にしてプロンプトを作成する</label><br>
+    <input type="submit" value="プロンプトを生成">
+  </form>
+  <div id="output"></div>
+  <button id="copyButton" style="display:none">プロンプトをコピー</button>
+  <script>
+    const form=document.getElementById("promptForm"),output=document.getElementById("output"),copyButton=document.getElementById("copyButton");function generatePrompt(e){e.preventDefault();const t=new FormData(form),n=t.get("productName"),o=t.get("relatedKeywords").split(",").map(e=>e.trim()),r=t.get("pageCount"),a=null!==t.get("googleSearch");let i=`私は${t.get("companyName")}の${t.get("personInCharge")}と申します。\n当社の${n}について、${t.get("targetIndustry")}向けの導入提案のプレゼン資料を作成したいと考えています。\nプレゼン資料には以下の項目を盛り込むことを想定しており、全体で${r}ページ程度におさめたいと考えています。\n\n`;const s=t.getAll("sections");s.length>0&&s.forEach(e=>{i+=`- ${e}\n`}),i+="\n上記の項目について、プレゼン資料の大見出しと中見出しを提案してください。\n各項目の内容を効果的に伝えるための構成を考慮してください。\nまた、最新の市場動向やトレンドを踏まえた情報も盛り込んでください。\n\n",i+=`${n}に関連するキーワード:\n`,o.forEach(e=>{i+=`- ${e}\n`}),a&&(i+=`\nプレゼン資料の作成にあたっては、「${n}」をキーワードにしてGoogle検索を行い、検索結果を参考にしてください。\n`),i+=`\nプレゼン資料のページ数: ${r}ページ程度\n`,output.innerText=i,copyButton.style.display="inline"}function copyPrompt(){navigator.clipboard.writeText(output.innerText).then(()=>{alert("プロンプトをクリップボードにコピーしました。")},e=>{console.error("プロンプトのコピーに失敗しました: ",e)})}form.addEventListener("submit",generatePrompt),copyButton.addEventListener("click",copyPrompt);
+  </script>
+</body>
+</html>
