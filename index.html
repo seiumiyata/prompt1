@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIへのプレゼン資料作成指示作成ツール</title>
+  <title>プロンプト作成ツール - セイウ株式会社</title>
   <style>
     body{font-family:Arial,sans-serif;background-color:#f0f0f0;margin:0;padding:20px}
     h1{color:#004080;text-align:center}
@@ -17,7 +17,7 @@
   </style>
 </head>
 <body>
-  <h1>AIへのプレゼン資料作成指示作成ツール</h1>
+  <h1>プロンプト作成ツール - セイウ株式会社</h1>
   <form id="promptForm">
     <label for="companyName">自社の会社名:</label>
     <input type="text" id="companyName" name="companyName" value="セイウ株式会社">
@@ -63,7 +63,7 @@
   <div id="output"></div>
   <button id="copyButton" style="display:none">プロンプトをコピー</button>
   <script>
-    const form=document.getElementById("promptForm"),output=document.getElementById("output"),copyButton=document.getElementById("copyButton");function generatePrompt(e){e.preventDefault();const t=new FormData(form),n=t.get("productName"),o=t.get("relatedKeywords").split(",").map(e=>e.trim()),r=t.get("pageCount"),a=null!==t.get("googleSearch");let i=`私は${t.get("companyName")}の${t.get("personInCharge")}と申します。\n当社の${n}について、${t.get("targetIndustry")}向けの導入提案のプレゼン資料を作成したいと考えています。\nプレゼン資料には以下の項目を盛り込むことを想定しており、全体で${r}ページ程度におさめたいと考えています。\n\n`;const s=t.getAll("sections");s.length>0&&s.forEach(e=>{i+=`- ${e}\n`}),i+="\n上記の項目について、プレゼン資料の大見出しと中見出しを提案してください。\n各項目の内容を効果的に伝えるための構成を考慮してください。\nまた、最新の市場動向やトレンドを踏まえた情報も盛り込んでください。\n\n",i+=`${n}に関連するキーワード:\n`,o.forEach(e=>{i+=`- ${e}\n`}),a&&(i+=`\nプレゼン資料の作成にあたっては、「${n}」をキーワードにしてGoogle検索を行い、検索結果を参考にしてください。\n`),i+=`\nプレゼン資料のページ数: ${r}ページ程度\n`,i+=`\nマークダウン記法で書いてほしい\nプレゼン資料のタイトルをh1タグ\nプレゼン資料の各ページの見出しをh2タグ\nプレゼン資料の各中見出しをh3タグ\n`,output.innerText=i,copyButton.style.display="inline"}function copyPrompt(){navigator.clipboard.writeText(output.innerText).then(()=>{alert("プロンプトをクリップボードにコピーしました。")},e=>{console.error("プロンプトのコピーに失敗しました: ",e)})}form.addEventListener("submit",generatePrompt),copyButton.addEventListener("click",copyPrompt);
+    const form=document.getElementById("promptForm"),output=document.getElementById("output"),copyButton=document.getElementById("copyButton");function generatePrompt(e){e.preventDefault();const t=new FormData(form),n=t.get("productName"),o=t.get("relatedKeywords").split(",").map(e=>e.trim()),r=t.get("pageCount"),a=null!==t.get("googleSearch");let i=`私は${t.get("companyName")}の${t.get("personInCharge")}と申します。\n当社の${n}について、${t.get("targetIndustry")}向けの導入提案のプレゼン資料を作成したいと考えています。\nプレゼン資料には以下の項目を盛り込むことを想定しており、全体で${r}ページ程度におさめたいと考えています。\n\n`;const s=t.getAll("sections");s.length>0&&s.forEach(e=>{i+=`- ${e}\n`}),i+="\n上記の項目について、プレゼン資料の大見出しと中見出しを提案してください。\n各項目の内容を効果的に伝えるための構成を考慮してください。\nまた、最新の市場動向やトレンドを踏まえた情報も盛り込んでください。\n\n",i+=`${n}に関連するキーワード:\n`,o.forEach(e=>{i+=`- ${e}\n`}),a&&(i+=`\nプレゼン資料の作成にあたっては、「${n}」をキーワードにしてGoogle検索を行い、検索結果を参考にしてください。\n`),i+=`\nプレゼン資料のページ数: ${r}ページ程度\n`,i+=`\nマークダウン記法で書いてほしい\nプレゼン資料のタイトルをh1タグ\nプレゼン資料の各ページの見出しをh2タグ\nプレゼン資料の各中見出しをh3タグ\nプロンプトの指示はすべてコードブロックで書いてほしい\n指定した内容以外の大見出し、中見出しは追加しないでほしい\n中見出しに付随する情報はある程度詳しく書いて欲しい\n`,output.innerText=i,copyButton.style.display="inline"}function copyPrompt(){navigator.clipboard.writeText(output.innerText).then(()=>{alert("プロンプトをクリップボードにコピーしました。")},e=>{console.error("プロンプトのコピーに失敗しました: ",e)})}form.addEventListener("submit",generatePrompt),copyButton.addEventListener("click",copyPrompt);
   </script>
 </body>
 </html>
